@@ -106,7 +106,10 @@ Rules:
   join separate passages.
 - If a field applies separately to more than one party, return one finding per
   party and name the party as the contract does (e.g. "Company", "Parent").
-- For fields of type number, the value is digits only (e.g. 90000000)."""
+- If a field does not relate to a particular party, leave party empty.
+- For fields of type number, the value is digits only (e.g. 90000000).
+- For fields of type date, the value is YYYY-MM-DD.
+- For fields of type choice, the value is exactly one of the listed option ids."""
 
 # Forma exacta de la respuesta. La API garantiza que el JSON la cumple.
 OUTPUT_SCHEMA = {
@@ -135,9 +138,12 @@ OUTPUT_SCHEMA = {
 
 def build_prompt(clause: dict, excerpts: list[Excerpt]) -> str:
     """Monta el mensaje: qué cláusula, qué campos y los trozos del contrato."""
-    fields = "\n".join(
-        f"- {f['field']} (type: {f['type']}): {f['description']}" for f in clause["extract"]
-    )
+    lines = []
+    for f in clause["extract"]:
+        lines.append(f"- {f['field']} (type: {f['type']}): {f['description']}")
+        for option_id, meaning in f.get("options", {}).items():
+            lines.append(f"    option {option_id}: {meaning}")
+    fields = "\n".join(lines)
     documents = "\n\n".join(
         f'<excerpt id="{e.id}" location="{e.location}">\n{e.text}\n</excerpt>' for e in excerpts
     )
@@ -182,19 +188,26 @@ def verify_quotes(clause_id: str, raw_findings: list[dict], excerpts: list[Excer
 
     Una cita es válida si aparece literalmente en el trozo que el modelo dice.
     Si no aparece, el dato se conserva pero queda marcado como NO verificado.
+
+    Si el dato no trae "excerpt_id" (datos extraídos a mano), se busca la
+    cita en todos los trozos seleccionados.
     """
     by_id = {e.id: e for e in excerpts}
     findings = []
     for raw in raw_findings:
-        excerpt = by_id.get(raw["excerpt_id"])
-        verified = excerpt is not None and normalize(raw["quote"]) in normalize(excerpt.text)
+        quote = normalize(raw["quote"])
+        if "excerpt_id" in raw:
+            excerpt = by_id.get(raw["excerpt_id"])
+        else:
+            excerpt = next((e for e in excerpts if quote in normalize(e.text)), None)
+        verified = excerpt is not None and quote in normalize(excerpt.text)
         findings.append(Finding(
             clause=clause_id,
             field=raw["field"],
-            party=raw["party"],
-            value=raw["value"],
+            party=raw.get("party", ""),
+            value=str(raw["value"]),
             quote=raw["quote"],
-            location=excerpt.location if excerpt else "desconocida",
+            location=excerpt.location if excerpt else "no localizada",
             verified=verified,
         ))
     return findings

@@ -160,34 +160,384 @@ anunciado (más de 6.000 millones) es una hipótesis sin verificar.
 
 ---
 
-## 3. Cláusulas pendientes
+## 3. No-shop y fiduciary out
 
-Se desarrollarán una a una, con el mismo esquema.
+### Qué es
 
-| Cláusula | Idea en una frase |
+- **No-shop (no solicitation):** desde la firma, la parte se compromete a no
+  buscar ofertas alternativas ni negociar con terceros.
+- **Fiduciary out:** la excepción. Si llega una oferta no solicitada que es
+  claramente mejor, el consejo puede atenderla, porque su deber hacia los
+  accionistas no se puede eliminar por contrato.
+
+### Por qué existe
+
+Es la otra mitad de la termination fee. El comprador quiere que su deal no se
+use como suelo para una subasta; el consejo necesita poder aceptar algo mejor.
+El resultado típico: no se puede *buscar*, pero sí *responder*.
+
+### Las piezas
+
+| Pieza | Qué regula |
 |---|---|
-| No-shop y fiduciary out | Prohíbe buscar otras ofertas, pero deja al consejo aceptar una claramente superior |
-| Material Adverse Effect | Define qué deterioro del negocio permite al comprador no cerrar |
-| Efforts regulatorios | Cuánto debe sacrificar el comprador para lograr las autorizaciones |
-| Outside date | La fecha límite tras la cual cualquiera puede abandonar |
-| Specific performance | Si un juez puede obligar a cerrar, en vez de solo indemnizar |
+| **Alternative / Acquisition Proposal** | Qué cuenta como oferta rival. Suele bastar con el 15%-20% de las acciones o activos |
+| **Window-shop** | Permiso para dar información y negociar con quien presente una oferta no solicitada que pueda llevar a una superior |
+| **Superior Proposal** | Oferta por la mayoría de la empresa (normalmente más del 50%) que el consejo considera mejor |
+| **Match right** | Antes de aceptar la oferta superior, hay que avisar a la contraparte y darle unos días para igualarla |
+| **Fiduciary termination right** | Derecho a terminar el contrato para firmar la oferta superior, pagando la fee |
+| **Change of recommendation** | El consejo retira su recomendación; puede deberse a una oferta superior o a un **intervening event** (un hecho nuevo e imprevisible) |
+| **Go-shop** | Lo contrario del no-shop: un periodo inicial en el que sí se pueden buscar ofertas. Poco habitual entre compradores estratégicos |
+
+### Qué lo hace agresivo
+
+- Que el consejo no pueda terminar el contrato y solo pueda cambiar su
+  recomendación (**force the vote**): el deal se vota igualmente.
+- Que no haya salida fiduciaria de ningún tipo.
+- Un match right muy largo, que da ventaja a la contraparte y desanima al
+  tercero.
+
+### Qué dice el contrato de prueba
+
+Es simétrico: la Section 6.5 obliga a la Company y la 6.6 a Parent, con los
+mismos términos.
+
+| Término | Contenido | Dónde |
+|---|---|---|
+| Umbral de oferta rival | Más del 20% de activos o acciones | Section 1.1, "Company Alternative Proposal" |
+| Superior Proposal | El mismo concepto con el umbral elevado al 50% | Section 1.1, "Company Superior Proposal" |
+| Window-shop | Permitido hasta el voto de los accionistas, con acuerdo de confidencialidad | Section 6.5(b) |
+| Aviso de ofertas | En 24 horas | Section 6.5(c) |
+| Fiduciary out | Puede cambiar la recomendación y terminar el contrato para firmar la oferta superior | Section 6.5(d) y 8.1(c)(iii) |
+| Intervening event | Permite cambiar la recomendación, no terminar | Section 6.5(d) |
+| Match right | 5 días hábiles; 4 más por cada mejora de la oferta, sin límite de rondas | Section 6.5(d)(i)-(iii) |
+
+Un detalle de redacción: la Section 6.5(f) dice que el incumplimiento de los
+representantes de la Company se considera incumplimiento "by Parent". Por el
+contexto parece una errata por "by Company". Es el tipo de cosa que un
+abogado revisa y que una herramienta automática no debe corregir por su cuenta.
+
+### Estándar y veredicto
+
+| Dato | Market | Off-market | Aggressive |
+|---|---|---|---|
+| Fiduciary out | Puede terminar por oferta superior | Solo cambio de recomendación | Ninguna salida |
+| Match right inicial | Hasta 5 días hábiles | 6 a 10 | Más de 10 |
+
+Son criterios propios, pendientes de contrastar con el ABA Deal Points Study.
+
+**En el contrato de prueba:** ambos datos son **market** para las dos partes.
+
+### Preguntas de entrevista
+
+- **¿Qué diferencia hay entre no-shop y go-shop?** El no-shop prohíbe buscar
+  ofertas; el go-shop lo permite durante un periodo inicial.
+- **¿Por qué no se puede pactar un no-shop sin excepciones?** Porque el consejo
+  no puede renunciar por contrato a su deber fiduciario.
+- **¿Para qué sirve el match right?** Da al primer comprador la última palabra y
+  encarece el intento de un tercero.
 
 ---
 
-## 4. Glosario
+## 4. Material Adverse Effect (MAE)
+
+### Qué es
+
+La definición del deterioro del negocio que permite a la otra parte negarse a
+cerrar. También se llama **MAC** (Material Adverse Change).
+
+### Cómo funciona
+
+No suele ser una cláusula propia, sino una definición que se usa en dos sitios:
+
+- como **condición de cierre**: "que no haya ocurrido un MAE desde la firma";
+- como **calificador** de las representations: una declaración falsa solo
+  importa si la falsedad supone un MAE.
+
+### La estructura de la definición
+
+1. **Regla general:** cualquier efecto materialmente adverso sobre el negocio.
+2. **Carve-outs (exclusiones):** riesgos que no cuentan aunque dañen el negocio:
+   economía general, cambios en el sector, cambios legales o contables, guerra,
+   catástrofes, pandemias, el propio anuncio del deal, no cumplir previsiones.
+3. **Disproportionate effect:** algunas exclusiones dejan de aplicarse si el
+   daño afecta a la empresa de forma desproporcionada frente a su sector.
+
+La lógica: el comprador asume los riesgos generales del mercado; el vendedor,
+los riesgos específicos de su empresa.
+
+### Por qué importa
+
+- **Pocas exclusiones** favorecen al comprador: más situaciones le permiten
+  no cerrar.
+- **Muchas exclusiones sin la salvedad** favorecen al vendedor: casi nada le
+  permite al comprador salir.
+
+En la práctica, un tribunal casi nunca aprecia un MAE. El caso de referencia
+es *Akorn v. Fresenius* (Delaware, 2018), la primera vez que se aceptó. Por eso
+la cláusula funciona sobre todo como palanca para renegociar el precio.
+
+### Qué dice el contrato de prueba
+
+| Término | Contenido | Dónde |
+|---|---|---|
+| Exclusiones (Company) | Diez, de la (i) a la (x): economía y mercados, sector, anuncio del deal, cumplimiento del contrato, guerra, catástrofes, cambios legales, GAAP, previsiones, pandemias | Section 1.1, "Company Material Adverse Effect" |
+| Disproportionate effect | Se aplica a siete de las diez exclusiones | La misma definición, inciso final |
+| Parent | Definición equivalente, con doce exclusiones | Section 1.1, "Parent Material Adverse Effect" |
+
+Las exclusiones mencionan expresamente los mercados de **Digital Assets**: un
+ejemplo de cómo la definición se adapta al negocio de las partes.
+
+### Estándar y veredicto
+
+| Exclusiones | Veredicto |
+|---|---|
+| Amplias, con disproportionate effect | market |
+| Amplias, sin disproportionate effect | off-market |
+| Pocas o ninguna | aggressive |
+
+Criterio propio. No se analiza cada exclusión por separado.
+
+**En el contrato de prueba:** **market** para las dos partes.
+
+### Preguntas de entrevista
+
+- **¿Qué es un carve-out?** Un riesgo excluido de la definición de MAE.
+- **¿Para qué sirve el disproportionate effect?** Devuelve al vendedor el
+  riesgo cuando un problema general le golpea más que a sus competidores.
+- **¿Es fácil invocar un MAE?** No. Los tribunales exigen un deterioro
+  sustancial y duradero; se usa más para renegociar que para romper.
+
+---
+
+## 5. Efforts regulatorios
+
+### Qué es
+
+El compromiso de las partes de hacer lo necesario para obtener las
+autorizaciones regulatorias: competencia (en EE. UU., la **HSR Act**),
+inversión extranjera y reguladores sectoriales.
+
+### Las dos preguntas
+
+**1. ¿Con qué nivel de esfuerzo?**
+
+| Estándar | Exigencia |
+|---|---|
+| Best efforts | La más alta; poco usada |
+| Reasonable best efforts | La habitual |
+| Commercially reasonable efforts | Más débil |
+
+**2. ¿Hay que aceptar remedios?** Si el regulador exige vender un negocio o
+aceptar restricciones para aprobar el deal:
+
+| Compromiso | Qué significa |
+|---|---|
+| **Hell or high water** | Hay que aceptar cualquier remedio, sin límite |
+| Limitado | Hay que aceptar remedios hasta un tope pactado |
+| Sin regular | Solo rige el estándar general de esfuerzo |
+| Excluido expresamente | Nadie está obligado a aceptar ningún remedio |
+
+### Por qué importa
+
+Decide quién soporta el riesgo regulatorio. Con *hell or high water*, el
+comprador; con la exclusión expresa, el deal puede caerse si el regulador pide
+algo. Suele ir ligada a una reverse termination fee: quien no acepta remedios,
+paga si el deal no se aprueba.
+
+Su peso real depende de cuánto se solapen los negocios de las partes. Si no
+compiten entre sí, el riesgo de competencia es bajo y la cláusula importa poco.
+
+### Qué dice el contrato de prueba
+
+| Término | Contenido | Dónde |
+|---|---|---|
+| Estándar | Reasonable best efforts, para todas las partes | Section 6.10(a) |
+| Plazo HSR | Notificación en 20 días hábiles | Section 6.10(b) |
+| Litigar | Obligación de defender el deal hasta resolución firme | Section 6.10(c) |
+| Remedios | Ninguna parte está obligada a aceptar desinversiones ni restricciones | Section 6.10(d) |
+| No empeorar | Prohibido hacer adquisiciones que retrasen las autorizaciones | Section 6.10(e) |
+
+### Estándar y veredicto
+
+| Dato | Market | Off-market |
+|---|---|---|
+| Estándar de esfuerzo | Reasonable best efforts | Best efforts; commercially reasonable efforts |
+| Remedios | Limitado; sin regular | Hell or high water; excluido expresamente |
+
+Criterio propio.
+
+**En el contrato de prueba:** estándar **market**; remedios **off-market**,
+porque se excluyen expresamente. Es la única cláusula del contrato que sale de
+mercado. Matiz: Trump Media y TAE operan en sectores distintos, así que el
+riesgo de competencia parece bajo; el veredicto señala la redacción, no un
+problema probable.
+
+### Preguntas de entrevista
+
+- **¿Qué es hell or high water?** La obligación de aceptar cualquier remedio que
+  pida el regulador para aprobar el deal.
+- **¿Qué relación tiene con la reverse termination fee?** Son alternativas para
+  repartir el mismo riesgo: o el comprador se obliga a aceptar remedios, o paga
+  si el deal no se aprueba.
+
+---
+
+## 6. Outside date
+
+### Qué es
+
+La fecha límite para cerrar. Si llega sin cierre, cualquiera de las partes
+puede terminar el contrato. También se llama **End Date**, **Termination Date**
+o **drop-dead date**.
+
+### Por qué importa
+
+- **Corta:** si las autorizaciones se retrasan, el deal muere o hay que
+  renegociar la prórroga, y eso da poder a quien quiera salir.
+- **Larga:** las partes quedan atadas durante mucho tiempo, sujetas a las
+  restricciones del periodo intermedio y expuestas a que el mercado cambie.
+
+### Elementos habituales
+
+- **Prórrogas automáticas** si solo faltan las autorizaciones regulatorias.
+- **Salvedad de incumplimiento:** no puede terminar por fecha límite quien ha
+  causado el retraso.
+- Relación con la fee: terminar por fecha límite con una oferta rival pendiente
+  puede activar el tail.
+
+### Qué dice el contrato de prueba
+
+| Término | Contenido | Dónde |
+|---|---|---|
+| Fecha límite | 18 de diciembre de 2026: doce meses desde la firma | Section 8.1(b)(i) |
+| Prórrogas | Ninguna | Section 8.1(b)(i) |
+| Salvedad | No puede invocarla quien haya sido la causa principal del retraso | Section 8.1(b)(i) |
+
+### Estándar y veredicto
+
+| Meses desde la firma | Veredicto |
+|---|---|
+| Hasta 3 | off-market (muy corto) |
+| 3 a 12 | market |
+| 12 a 18 | off-market (largo) |
+| Más de 18 | aggressive |
+
+Criterio propio; no se tienen en cuenta las prórrogas.
+
+**En el contrato de prueba:** 12 meses, **market**, en el límite del tramo.
+
+### Preguntas de entrevista
+
+- **¿Qué pasa si llega la outside date sin cierre?** Cualquiera puede terminar
+  el contrato, salvo quien haya causado el retraso.
+- **¿Por qué se pactan prórrogas automáticas?** Para no perder un deal al que
+  solo le falta una autorización que está en trámite.
+
+---
+
+## 7. Specific performance
+
+### Qué es
+
+El derecho a pedir a un juez que obligue a la otra parte a cumplir el contrato
+(incluido cerrar la operación), en lugar de limitarse a reclamar una
+indemnización.
+
+### Por qué importa
+
+Sin cumplimiento forzoso, quien se arrepiente solo arriesga daños o una fee:
+el contrato funciona como una opción. Con él, el contrato obliga de verdad.
+Los daños son además difíciles de probar en un deal fallido, y por eso las
+partes declaran que no son remedio suficiente.
+
+### Variantes
+
+| Variante | Dónde se ve |
+|---|---|
+| Plena y mutua | Deals entre compradores estratégicos |
+| Condicionada a la financiación | Compradores financieros (private equity): solo se puede obligar a cerrar si la deuda está disponible; si no, se cobra la reverse termination fee |
+| Unilateral | Poco frecuente |
+| Ninguna | El único remedio es la fee |
+
+### Qué dice el contrato de prueba
+
+| Término | Contenido | Dónde |
+|---|---|---|
+| Disponibilidad | Cualquier parte puede exigir el cumplimiento, incluido el cierre | Section 9.5(a) |
+| Compatibilidad | No lo impide que exista un remedio monetario | Section 9.5(a) |
+| Sin oposición ni fianza | Nadie alegará que los daños bastan, ni se exige fianza | Section 9.5(b) |
+
+Encaja con la Section 8.3(e): la fee es remedio exclusivo *después* de
+terminar el contrato; antes de terminarlo, se puede exigir el cumplimiento.
+
+### Estándar y veredicto
+
+| Disponibilidad | Veredicto |
+|---|---|
+| Plena y mutua | market |
+| Condicionada a la financiación | off-market |
+| Unilateral | off-market |
+| Ninguna | aggressive |
+
+Criterio propio.
+
+**En el contrato de prueba:** **market**.
+
+### Preguntas de entrevista
+
+- **¿Por qué no bastan los daños?** Porque son difíciles de cuantificar y no
+  devuelven la operación a quien quería cerrarla.
+- **¿Qué cambia con un comprador de private equity?** El cumplimiento forzoso
+  suele estar condicionado a que la financiación esté disponible.
+
+---
+
+## 8. Resumen del contrato de prueba
+
+| Cláusula | Dato | Veredicto |
+|---|---|---|
+| Termination fee | 90 millones por parte, en torno al 3,0% | market |
+| Fiduciary out | Terminación por oferta superior | market |
+| Match right | 5 días hábiles | market |
+| MAE | Exclusiones amplias con disproportionate effect | market |
+| Estándar de esfuerzo | Reasonable best efforts | market |
+| Remedios regulatorios | Excluidos expresamente | off-market |
+| Outside date | 12 meses | market |
+| Specific performance | Plena y mutua | market |
+
+Estos datos proceden de una lectura manual del contrato
+(`data/reference/tmtg_tae_manual_findings.yaml`), con las citas verificadas
+por el programa. La tabla completa con citas está en `docs/ejemplo-informe.md`.
+
+---
+
+## 9. Glosario
 
 | Término | Significado |
 |---|---|
 | Break-up fee | Otro nombre de la termination fee |
+| Carve-out | Riesgo excluido de la definición de MAE |
 | Change of recommendation | El consejo retira su recomendación de votar a favor del deal |
 | Closing | Ejecución efectiva de la operación |
+| Disproportionate effect | Salvedad que devuelve al vendedor un riesgo general si le afecta más que a su sector |
 | End Date / Outside date | Fecha límite para cerrar |
 | Enterprise value | Equity value más deuda neta |
 | Equity value | Valor de las acciones de la empresa |
 | Fiduciary out | Salida que permite al consejo cumplir su deber hacia los accionistas |
+| Force the vote | Obligación de someter el deal a votación aunque el consejo cambie su recomendación |
+| Go-shop | Periodo inicial en el que sí se pueden buscar ofertas alternativas |
+| Hell or high water | Obligación de aceptar cualquier remedio regulatorio, sin límite |
+| HSR Act | Ley estadounidense de notificación previa de concentraciones |
+| Intervening event | Hecho nuevo e imprevisible que permite al consejo cambiar su recomendación |
+| MAE / MAC | Material Adverse Effect / Change: deterioro que permite no cerrar |
+| Match right | Derecho a igualar una oferta rival antes de que se acepte |
 | Merger Sub | Filial instrumental del comprador |
+| No-shop | Prohibición de buscar o negociar ofertas alternativas |
 | No-vote | Los accionistas votan en contra del deal |
+| Reverse termination fee | Fee que paga el comprador si no puede cerrar |
 | Signing | Firma del contrato |
+| Specific performance | Cumplimiento forzoso del contrato ordenado por un juez |
 | Superior proposal | Oferta de un tercero que el consejo considera mejor |
 | Tail | Periodo tras la terminación en el que una operación alternativa obliga a pagar la fee |
 | Willful Breach | Incumplimiento deliberado, a sabiendas |
+| Window-shop | Permiso para atender ofertas no solicitadas |

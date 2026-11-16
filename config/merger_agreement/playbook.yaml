@@ -1,19 +1,29 @@
 # Playbook de un merger agreement: CÓMO calificar cada cláusula.
 # Es el criterio jurídico del proyecto. El motor no contiene ningún umbral:
 # todos están aquí.
+#
+# Cada estándar califica UN campo de una cláusula (los ids son los de
+# clauses.yaml) y es de uno de dos tipos:
+#
+#   metric + bands   para datos numéricos. "metric" dice cómo convertir el
+#                    dato en un número; "bands" son tramos ordenados de menor
+#                    a mayor. Se aplica el primer tramo cuyo límite superior
+#                    (up_to) no se supera; el último no lleva up_to.
+#   mapping          para campos de tipo choice: a cada opción le corresponde
+#                    un veredicto.
+#
+# Veredictos: market, off-market, aggressive.
 
 contract_type: merger_agreement
 
 standards:
-  - clause: termination_fee        # mismo id que en clauses.yaml
-    # Qué se mide. El contrato da el importe; el valor del deal viene del
-    # archivo de datos del contrato (data/contracts/<nombre>.yaml).
+  # ------------------------------------------------------------------ 1
+  - clause: termination_fee
+    field: amount_usd
+    # El contrato da el importe; el valor del deal viene del archivo de datos
+    # del contrato (data/contracts/<nombre>.yaml).
     metric: fee_pct_of_payer_equity_value
-    metric_description: >
-      Importe de la fee dividido entre el equity value de la parte que la
-      paga, en porcentaje.
-    # Tramos ordenados de menor a mayor. Se aplica el primero cuyo límite
-    # superior (up_to) no se supera.
+    unit: "% del equity value de quien paga"
     bands:
       - up_to: 2.0
         verdict: off-market
@@ -24,11 +34,140 @@ standards:
       - up_to: 4.0
         verdict: off-market
         reason: Por encima del rango habitual, sin llegar a ser disuasoria.
-      - verdict: aggressive      # sin up_to: todo lo que supere el 4,0%
+      - verdict: aggressive
         reason: Puede disuadir ofertas rivales; favorece a quien la cobra.
     sources:
       - DealLawyers.com, "Termination Fees - How Much is Too Much?" (mayo 2025). Rango habitual 2,0%-3,5% del equity value.
       - Houlihan Lokey, 2024 Transaction Termination Fee Study. Mediana 2,5%-2,6% del transaction value.
     caveats:
       - Los límites de 2,0% y 3,5% vienen de la fuente. El umbral de 4,0% para "aggressive" es criterio propio.
-      - Solo se califica la cuantía. Tail, umbral del tail y remedio exclusivo aún no se califican.
+      - Solo se califica la cuantía. Tail, umbral del tail y remedio exclusivo no se califican.
+
+  # ------------------------------------------------------------------ 2
+  - clause: no_shop
+    field: fiduciary_out
+    mapping:
+      terminate_for_superior_proposal:
+        verdict: market
+        reason: El consejo puede terminar el contrato para aceptar una oferta superior, pagando la fee. Es la estructura habitual.
+      change_recommendation_only:
+        verdict: off-market
+        reason: El consejo puede cambiar su recomendación pero debe someter el deal a votación ("force the vote"). Restringe más de lo habitual.
+      none:
+        verdict: aggressive
+        reason: Sin salida fiduciaria. Impide al consejo reaccionar ante una oferta mejor.
+    sources: []
+    caveats:
+      - Criterio propio, basado en la práctica general de deals de cotizadas en EE. UU. Pendiente de contrastar con el ABA Deal Points Study.
+
+  - clause: no_shop
+    field: match_right_business_days
+    metric: number
+    unit: días hábiles
+    bands:
+      - up_to: 5
+        verdict: market
+        reason: Plazo de igualación dentro de lo habitual (hasta cinco días hábiles).
+      - up_to: 10
+        verdict: off-market
+        reason: Plazo de igualación largo. Da ventaja a la contraparte frente a un tercero.
+      - verdict: aggressive
+        reason: Plazo de igualación muy largo; puede desanimar a cualquier oferente rival.
+    sources: []
+    caveats:
+      - Umbrales de criterio propio. Pendiente de contrastar con el ABA Deal Points Study.
+      - Solo se califica el plazo inicial, no el de las ofertas mejoradas.
+
+  # ------------------------------------------------------------------ 3
+  - clause: material_adverse_effect
+    field: carve_outs
+    mapping:
+      broad_with_disproportionate_qualifier:
+        verdict: market
+        reason: Exclusiones amplias de riesgos generales, con la salvedad de efecto desproporcionado. Es la redacción habitual.
+      broad_without_disproportionate_qualifier:
+        verdict: off-market
+        reason: Exclusiones sin la salvedad de efecto desproporcionado. Favorece a la parte cuyo MAE se define.
+      narrow_or_none:
+        verdict: aggressive
+        reason: Pocas o ninguna exclusión. Traslada los riesgos generales a la parte cuyo MAE se define y facilita no cerrar.
+    sources: []
+    caveats:
+      - Criterio propio. No se analiza cada exclusión por separado ni el lenguaje prospectivo ("would reasonably be expected to").
+
+  # ------------------------------------------------------------------ 4
+  - clause: regulatory_efforts
+    field: efforts_standard
+    mapping:
+      reasonable_best_efforts:
+        verdict: market
+        reason: Es el estándar habitual.
+      best_efforts:
+        verdict: off-market
+        reason: Estándar más exigente de lo habitual.
+      commercially_reasonable_efforts:
+        verdict: off-market
+        reason: Estándar más débil de lo habitual. Reduce la certeza de cierre.
+    sources: []
+    caveats:
+      - Criterio propio.
+
+  - clause: regulatory_efforts
+    field: divestiture_commitment
+    mapping:
+      hell_or_high_water:
+        verdict: off-market
+        reason: Obligación ilimitada de aceptar remedios. Poco frecuente; máxima certeza de cierre para la contraparte.
+      limited:
+        verdict: market
+        reason: Obligación de aceptar remedios hasta un límite pactado. Reparto equilibrado del riesgo regulatorio.
+      silent:
+        verdict: market
+        reason: Sin regulación específica; rige el estándar general de esfuerzo.
+      none_expressly:
+        verdict: off-market
+        reason: Se excluye expresamente cualquier obligación de aceptar remedios. Si un regulador los exige, el deal puede no cerrarse.
+    sources: []
+    caveats:
+      - Criterio propio. El peso real de esta cláusula depende del solapamiento competitivo entre las partes, que el contrato no dice.
+
+  # ------------------------------------------------------------------ 5
+  - clause: outside_date
+    field: end_date
+    metric: months_from_signing
+    unit: meses desde la firma
+    bands:
+      - up_to: 3
+        verdict: off-market
+        reason: Plazo muy corto para obtener votos y autorizaciones.
+      - up_to: 12
+        verdict: market
+        reason: Plazo dentro de lo habitual (hasta doce meses).
+      - up_to: 18
+        verdict: off-market
+        reason: Plazo largo. Puede estar justificado por un proceso regulatorio complejo.
+      - verdict: aggressive
+        reason: Plazo muy largo. Mantiene a las partes atadas durante más de año y medio.
+    sources: []
+    caveats:
+      - Umbrales de criterio propio. No se tienen en cuenta las prórrogas.
+
+  # ------------------------------------------------------------------ 6
+  - clause: specific_performance
+    field: availability
+    mapping:
+      mutual_full:
+        verdict: market
+        reason: Todas las partes pueden exigir el cumplimiento forzoso. Es lo habitual entre compradores estratégicos.
+      conditional_on_financing:
+        verdict: off-market
+        reason: El cierre solo puede exigirse si hay financiación. Habitual con compradores financieros, no con estratégicos.
+      one_sided:
+        verdict: off-market
+        reason: Solo una parte puede exigir el cumplimiento.
+      none:
+        verdict: aggressive
+        reason: Sin cumplimiento forzoso, el deal equivale a una opción - quien incumple solo arriesga la fee o los daños.
+    sources: []
+    caveats:
+      - Criterio propio.

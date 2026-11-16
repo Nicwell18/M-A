@@ -1,5 +1,17 @@
 # Cláusulas objetivo de un merger agreement: QUÉ buscar en el contrato.
-# (Cómo calificar lo encontrado está en playbook.yaml.)
+# (Cómo calificar lo encontrado está en playbook.yaml; la explicación de cada
+# cláusula, en docs/guia-de-clausulas.md.)
+#
+# Cada cláusula tiene:
+#   where_to_look  dónde suele estar. El motor selecciona esos trozos y solo
+#                  esos se envían al modelo.
+#       section_titles  Sections cuyo título contiene alguno de estos textos
+#       defined_terms   definiciones cuyo término contiene alguno de estos textos
+#   extract        datos que hay que sacar, cada uno con su cita literal.
+#       type: number  un número, sin símbolos ni comas
+#       type: date    una fecha en formato AAAA-MM-DD
+#       type: text    un resumen breve
+#       type: choice  una de las opciones listadas en "options"
 #
 # Para añadir una cláusula: copia un bloque, cambia el id y rellena los campos.
 
@@ -8,22 +20,124 @@ contract_type: merger_agreement
 clauses:
   - id: termination_fee
     name: Termination fee
-    # Explicación completa en docs/guia-de-clausulas.md
     summary: >
       Cantidad que paga una parte a la otra si el contrato se termina por
       causas atribuibles a ella (típicamente, aceptar una oferta mejor o que
       su consejo retire la recomendación).
-    # Dónde buscarla. El motor selecciona estos trozos del contrato y solo
-    # esos se envían al modelo. La cuantía suele estar en las definiciones.
     where_to_look:
-      section_titles: ["Termination Fee"]   # Sections cuyo título contiene esto
-      defined_terms: ["Termination Fee"]    # definiciones cuyo término contiene esto
-    # Datos que hay que sacar del texto, cada uno con su cita literal.
-    # type: number -> el valor debe ser un número (sin símbolos ni comas).
+      section_titles: ["Termination Fee"]
+      defined_terms: ["Termination Fee"]
     extract:
       - field: amount_usd
+        label: Importe de la fee (USD)
         type: number
         description: Importe de la termination fee en dólares. Uno por cada parte que pueda tener que pagarla.
       - field: triggers
+        label: Supuestos de pago
         type: text
         description: Resumen breve de los supuestos en los que esa parte paga la fee.
+
+  - id: no_shop
+    name: No-shop y fiduciary out
+    summary: >
+      Prohibición de buscar o negociar ofertas alternativas, y las excepciones
+      que permiten al consejo cumplir su deber fiduciario ante una oferta
+      superior.
+    where_to_look:
+      section_titles: ["No Solicitation", "No Shop", "Non-Solicitation"]
+      defined_terms: ["Superior Proposal"]
+    extract:
+      - field: fiduciary_out
+        label: Fiduciary out
+        type: choice
+        description: Qué puede hacer el consejo de esa parte ante una oferta superior. Uno por cada parte sujeta a no-shop.
+        options:
+          terminate_for_superior_proposal: Puede terminar el contrato para firmar la oferta superior.
+          change_recommendation_only: Puede cambiar su recomendación, pero no terminar el contrato para firmar la oferta superior.
+          none: No puede ni cambiar la recomendación ni terminar el contrato.
+      - field: match_right_business_days
+        label: Match right inicial (días hábiles)
+        type: number
+        description: Días hábiles de preaviso que esa parte debe dar a la otra para que iguale la oferta, la primera vez. Uno por cada parte sujeta a no-shop.
+
+  - id: material_adverse_effect
+    name: Material Adverse Effect
+    summary: >
+      Definición del deterioro del negocio que permite a la otra parte no
+      cerrar. Lo relevante son las exclusiones (carve-outs) y si se aplican
+      aunque la empresa se vea afectada de forma desproporcionada.
+    where_to_look:
+      defined_terms: ["Material Adverse Effect"]
+    extract:
+      - field: carve_outs
+        label: Exclusiones del MAE
+        type: choice
+        description: Alcance de las exclusiones de la definición. Uno por cada parte cuyo MAE se define.
+        options:
+          broad_with_disproportionate_qualifier: Excluye riesgos generales (economía, sector, cambios legales, guerra o catástrofes, anuncio del deal...) pero los vuelve a incluir si afectan a la empresa de forma desproporcionada.
+          broad_without_disproportionate_qualifier: Excluye riesgos generales sin la salvedad de efecto desproporcionado.
+          narrow_or_none: Pocas o ninguna exclusión de riesgos generales.
+
+  - id: regulatory_efforts
+    name: Efforts regulatorios
+    summary: >
+      Nivel de esfuerzo que las partes deben emplear para obtener las
+      autorizaciones regulatorias, y si están obligadas a aceptar remedios
+      (desinversiones, restricciones de conducta) para conseguirlas.
+    where_to_look:
+      section_titles: ["Efforts", "Regulatory Approvals", "Regulatory Matters", "Antitrust"]
+    extract:
+      - field: efforts_standard
+        label: Estándar de esfuerzo
+        type: choice
+        description: Nivel de esfuerzo general para obtener las autorizaciones.
+        options:
+          reasonable_best_efforts: Reasonable best efforts.
+          best_efforts: Best efforts.
+          commercially_reasonable_efforts: Commercially reasonable efforts u otro estándar más débil.
+      - field: divestiture_commitment
+        label: Obligación de aceptar remedios
+        type: choice
+        description: Si alguna parte está obligada a desinvertir o aceptar restricciones para obtener las autorizaciones.
+        options:
+          hell_or_high_water: Obligación de aceptar cualquier remedio necesario, sin límite.
+          limited: Obligación de aceptar remedios hasta un límite definido.
+          none_expressly: El contrato dice expresamente que no hay obligación de aceptar remedios.
+          silent: El contrato no lo regula más allá del estándar general de esfuerzo.
+
+  - id: outside_date
+    name: Outside date
+    summary: >
+      Fecha límite tras la cual cualquiera de las partes puede terminar el
+      contrato si la operación no se ha cerrado.
+    where_to_look:
+      section_titles: ["Termination"]
+      defined_terms: ["End Date", "Outside Date", "Termination Date"]
+    extract:
+      - field: end_date
+        label: Fecha límite inicial
+        type: date
+        description: Fecha límite inicial, sin contar prórrogas.
+      - field: extensions
+        label: Prórrogas
+        type: text
+        description: Prórrogas previstas de la fecha límite y sus condiciones. No devolver nada si no hay ninguna.
+
+  - id: specific_performance
+    name: Specific performance
+    summary: >
+      Derecho a pedir a un juez que obligue a la otra parte a cumplir el
+      contrato (incluido cerrar la operación), en lugar de limitarse a
+      reclamar daños.
+    where_to_look:
+      section_titles: ["Specific Performance", "Specific Enforcement", "Remedies"]
+    extract:
+      - field: availability
+        label: Disponibilidad
+        type: choice
+        description: Quién puede exigir el cumplimiento forzoso y con qué condiciones.
+        options:
+          mutual_full: Todas las partes pueden exigirlo, sin condiciones.
+          conditional_on_financing: Solo se puede obligar al comprador a cerrar si la financiación está disponible.
+          one_sided: Solo una de las partes puede exigirlo.
+          none: No se prevé, o el único remedio es cobrar una fee.

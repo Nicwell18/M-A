@@ -1,0 +1,91 @@
+# Datos extraídos A MANO del contrato TMTG / TAE (no por el modelo).
+#
+# Sirven para dos cosas:
+#   1. Ejecutar el análisis completo sin API key:
+#        python analyze.py data/contracts/tmtg_tae_merger_agreement.pdf \
+#               --findings data/reference/tmtg_tae_manual_findings.yaml
+#   2. Como respuesta de referencia para comprobar, más adelante, si el modelo
+#      extrae lo mismo.
+#
+# Las citas se verifican contra el contrato igual que las del modelo.
+
+note: Lectura manual del contrato, pendiente de revisión jurídica.
+
+findings:
+  # --- Termination fee
+  - clause: termination_fee
+    field: amount_usd
+    party: Company
+    value: 90000000
+    quote: "“Company Termination Fee” means an amount equal to $90,000,000."
+  - clause: termination_fee
+    field: amount_usd
+    party: Parent
+    value: 90000000
+    quote: "“Parent Termination Fee” means an amount equal to $90,000,000."
+  - clause: termination_fee
+    field: triggers
+    party: Company
+    value: Superior proposal, cambio de recomendación y tail de 12 meses (operación alternativa por más del 50%).
+    quote: "Company shall have terminated this Agreement pursuant to Section 8.1(c)(iii) [Company Superior Proposal]"
+  - clause: termination_fee
+    field: triggers
+    party: Parent
+    value: Superior proposal, cambio de recomendación y tail de 12 meses (operación alternativa por más del 50%).
+    quote: "Parent shall have terminated this Agreement pursuant to Section 8.1(d)(iii)[Parent Superior Proposal]"
+
+  # --- No-shop y fiduciary out
+  - clause: no_shop
+    field: fiduciary_out
+    party: Company
+    value: terminate_for_superior_proposal
+    quote: "cause or permit Company to terminate this Agreement and enter into a Company Alternative Acquisition Agreement with respect to such Company Superior Proposal"
+  - clause: no_shop
+    field: fiduciary_out
+    party: Parent
+    value: terminate_for_superior_proposal
+    quote: "cause or permit Parent to terminate this Agreement and enter into a Parent Alternative Acquisition Agreement with respect to such Parent Superior Proposal"
+  - clause: no_shop
+    field: match_right_business_days
+    party: Company
+    value: 5
+    quote: "Company shall have provided prior written notice to Parent of the Company Board’s intention to take such actions at least five (5) Business Days in advance of taking such action"
+  - clause: no_shop
+    field: match_right_business_days
+    party: Parent
+    value: 5
+    quote: "Parent shall have provided prior written notice to Company of the Parent Board’s intention to take such actions at least five (5) Business Days in advance of taking such action"
+
+  # --- Material Adverse Effect
+  - clause: material_adverse_effect
+    field: carve_outs
+    party: Company
+    value: broad_with_disproportionate_qualifier
+    quote: "such Effects shall be taken into account to the extent they have a disproportionate adverse effect on Company and its Subsidiaries, taken as a whole"
+  - clause: material_adverse_effect
+    field: carve_outs
+    party: Parent
+    value: broad_with_disproportionate_qualifier
+    quote: "Effects shall be taken into account to the extent they have a disproportionate adverse effect on Parent and its Subsidiaries, taken as a whole"
+
+  # --- Efforts regulatorios
+  - clause: regulatory_efforts
+    field: efforts_standard
+    value: reasonable_best_efforts
+    quote: "each of the Parties to this Agreement shall (and shall cause each of their Affiliates to) use its reasonable best efforts to take promptly"
+  - clause: regulatory_efforts
+    field: divestiture_commitment
+    value: none_expressly
+    quote: "none of the Parties shall be required to (and none of the Parties shall without the prior written consent of the other Parties) agree to any term, condition, obligation, liability, requirement, limitation, qualification, remedy, commitment, sanction or other Action imposed, required or requested by a Governmental Entity"
+
+  # --- Outside date
+  - clause: outside_date
+    field: end_date
+    value: "2026-12-18"
+    quote: "if the Effective Time shall not have occurred on or before December 18, 2026 (the “End Date”)"
+
+  # --- Specific performance
+  - clause: specific_performance
+    field: availability
+    value: mutual_full
+    quote: "the non-breaching Party shall be entitled (in addition to any other remedy that may be available to it whether in law or equity, including monetary damages) to obtain (i) a decree or order of specific performance"
