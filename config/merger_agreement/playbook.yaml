@@ -1,0 +1,34 @@
+# Playbook de un merger agreement: CÓMO calificar cada cláusula.
+# Es el criterio jurídico del proyecto. El motor no contiene ningún umbral:
+# todos están aquí.
+
+contract_type: merger_agreement
+
+standards:
+  - clause: termination_fee        # mismo id que en clauses.yaml
+    # Qué se mide. El contrato da el importe; el valor del deal viene del
+    # archivo de datos del contrato (data/contracts/<nombre>.yaml).
+    metric: fee_pct_of_payer_equity_value
+    metric_description: >
+      Importe de la fee dividido entre el equity value de la parte que la
+      paga, en porcentaje.
+    # Tramos ordenados de menor a mayor. Se aplica el primero cuyo límite
+    # superior (up_to) no se supera.
+    bands:
+      - up_to: 2.0
+        verdict: off-market
+        reason: Por debajo del rango habitual. Favorece a quien paga; protege poco el deal.
+      - up_to: 3.5
+        verdict: market
+        reason: Dentro del rango más habitual (2,0%-3,5% del equity value).
+      - up_to: 4.0
+        verdict: off-market
+        reason: Por encima del rango habitual, sin llegar a ser disuasoria.
+      - verdict: aggressive      # sin up_to: todo lo que supere el 4,0%
+        reason: Puede disuadir ofertas rivales; favorece a quien la cobra.
+    sources:
+      - DealLawyers.com, "Termination Fees - How Much is Too Much?" (mayo 2025). Rango habitual 2,0%-3,5% del equity value.
+      - Houlihan Lokey, 2024 Transaction Termination Fee Study. Mediana 2,5%-2,6% del transaction value.
+    caveats:
+      - Los límites de 2,0% y 3,5% vienen de la fuente. El umbral de 4,0% para "aggressive" es criterio propio.
+      - Solo se califica la cuantía. Tail, umbral del tail y remedio exclusivo aún no se califican.

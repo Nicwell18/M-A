@@ -1,0 +1,27 @@
+# Cláusulas objetivo de un merger agreement: QUÉ buscar en el contrato.
+# (Cómo calificar lo encontrado está en playbook.yaml.)
+#
+# Para añadir una cláusula: copia un bloque, cambia el id y rellena los campos.
+
+contract_type: merger_agreement
+
+clauses:
+  - id: termination_fee
+    name: Termination fee
+    # Explicación completa en docs/guia-de-clausulas.md
+    summary: >
+      Cantidad que paga una parte a la otra si el contrato se termina por
+      causas atribuibles a ella (típicamente, aceptar una oferta mejor o que
+      su consejo retire la recomendación).
+    # Pistas para localizarla. La cuantía suele estar en las definiciones.
+    where_to_look:
+      - Section titulada "Termination Fee" o "Fees and Expenses"
+      - Definiciones de "Termination Fee" en la Section de Definitions
+    # Datos que hay que sacar del texto, cada uno con su cita literal.
+    extract:
+      - field: amount_usd
+        description: Importe de la fee en dólares
+      - field: payer
+        description: Qué parte la paga (puede haber una por cada lado)
+      - field: triggers
+        description: Supuestos en los que se paga

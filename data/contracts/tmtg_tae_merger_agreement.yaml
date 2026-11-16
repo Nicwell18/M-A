@@ -1,0 +1,21 @@
+# Datos del deal que NO están en el contrato y hacen falta para calificarlo.
+# Se rellenan a mano a partir del anuncio de la operación.
+
+contract_file: tmtg_tae_merger_agreement.pdf
+contract_type: merger_agreement
+parties:
+  parent: Trump Media & Technology Group Corp.
+  company: TAE Technologies, Inc.
+signing_date: 2025-12-18
+consideration: all-stock
+
+# En millones de dólares.
+deal_value_usd_m: 6000
+deal_value_source: Nota de prensa conjunta (dic. 2025), "all-stock transaction valued at more than $6 billion".
+
+# Equity value de cada parte. SIN VERIFICAR: se asume un reparto 50/50, deducido
+# de la definición de "Aggregate Merger Consideration" (Section 1.1).
+equity_value_usd_m:
+  parent: 3000
+  company: 3000
+equity_value_verified: false

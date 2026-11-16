@@ -20,8 +20,11 @@ trazable, no la escala.
 ## Idea de diseño: motor y conocimiento separados
 
 - `deal_analyzer/` es **el motor**. No contiene nada jurídico.
-- `config/` (aún no existe) contendrá **el conocimiento**: la lista de
-  cláusulas objetivo y el playbook de estándares de mercado.
+- `config/<tipo de contrato>/` es **el conocimiento**, en dos archivos:
+  `clauses.yaml` (qué buscar) y `playbook.yaml` (cómo calificarlo, con sus
+  fuentes). De momento cubren una cláusula: la termination fee.
+- `docs/guia-de-clausulas.md` explica cada cláusula: qué es, por qué importa
+  y cómo se califica.
 
 Añadir otro tipo de contrato (p. ej. credit agreements) debe ser añadir dos
 archivos de configuración, sin tocar el motor.
@@ -90,7 +93,9 @@ casi siempre es un encabezado que se ha escapado.
 deal_analyzer/ingest.py   capa 1
 main.py                   enseña el troceado de un contrato
 fetch_edgar.py            descarga un contrato de EDGAR
-data/contracts/           contratos (.htm o .pdf)
+config/merger_agreement/  cláusulas objetivo y playbook de M&A
+docs/guia-de-clausulas.md guía explicativa de las cláusulas
+data/contracts/           contratos (.htm o .pdf) y los datos de cada deal (.yaml)
 tests/                    pruebas con un contrato sintético
 ```
 
