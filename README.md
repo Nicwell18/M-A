@@ -36,9 +36,13 @@ python main.py data/contracts/contrato.htm --show 5.3   # texto literal de una s
 python main.py data/contracts/contrato.htm --json       # guarda los chunks en output/
 ```
 
-Acepta `.htm` / `.html` (el formato nativo de EDGAR) y `.pdf`. Para conseguir
-un contrato: abrir el Exhibit 2.1 del 8-K en EDGAR y *Guardar página como →
-solo HTML*.
+Acepta `.htm` / `.html` (el formato nativo de EDGAR) y `.pdf`. Para descargar
+un contrato de EDGAR a `data/contracts/`:
+
+```bash
+export SEC_USER_AGENT="Nombre Apellido nombre@email.com"   # la SEC lo exige
+python fetch_edgar.py https://www.sec.gov/Archives/edgar/data/.../ex2-1.htm
+```
 
 ## Capa 1: cómo funciona la ingesta
 
@@ -85,6 +89,7 @@ casi siempre es un encabezado que se ha escapado.
 ```
 deal_analyzer/ingest.py   capa 1
 main.py                   enseña el troceado de un contrato
+fetch_edgar.py            descarga un contrato de EDGAR
 data/contracts/           contratos (.htm o .pdf)
 tests/                    pruebas con un contrato sintético
 ```
