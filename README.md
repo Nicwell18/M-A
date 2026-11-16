@@ -12,7 +12,7 @@ trazable, no la escala.
 
 | Capa | Qué hace | Estado |
 |---|---|---|
-| 1. Ingesta | HTML o PDF → una pieza por cada Section del contrato | Hecha. Probada solo con un contrato sintético; falta un contrato real |
+| 1. Ingesta | HTML o PDF → una pieza por cada Section del contrato | Hecha. Probada con un contrato real (TMTG / TAE Technologies, dic. 2025): 112 de las 112 Sections de su índice |
 | 2. Extracción | Localiza las cláusulas objetivo, con cita y ubicación | Pendiente |
 | 3. Red flags | Compara cada cláusula con el playbook | Pendiente |
 | 4. Output | Tabla exportable a CSV / Markdown | Pendiente |
