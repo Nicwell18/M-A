@@ -13,15 +13,17 @@ clauses:
       Cantidad que paga una parte a la otra si el contrato se termina por
       causas atribuibles a ella (típicamente, aceptar una oferta mejor o que
       su consejo retire la recomendación).
-    # Pistas para localizarla. La cuantía suele estar en las definiciones.
+    # Dónde buscarla. El motor selecciona estos trozos del contrato y solo
+    # esos se envían al modelo. La cuantía suele estar en las definiciones.
     where_to_look:
-      - Section titulada "Termination Fee" o "Fees and Expenses"
-      - Definiciones de "Termination Fee" en la Section de Definitions
+      section_titles: ["Termination Fee"]   # Sections cuyo título contiene esto
+      defined_terms: ["Termination Fee"]    # definiciones cuyo término contiene esto
     # Datos que hay que sacar del texto, cada uno con su cita literal.
+    # type: number -> el valor debe ser un número (sin símbolos ni comas).
     extract:
       - field: amount_usd
-        description: Importe de la fee en dólares
-      - field: payer
-        description: Qué parte la paga (puede haber una por cada lado)
+        type: number
+        description: Importe de la termination fee en dólares. Uno por cada parte que pueda tener que pagarla.
       - field: triggers
-        description: Supuestos en los que se paga
+        type: text
+        description: Resumen breve de los supuestos en los que esa parte paga la fee.

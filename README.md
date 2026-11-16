@@ -13,8 +13,8 @@ trazable, no la escala.
 | Capa | Qué hace | Estado |
 |---|---|---|
 | 1. Ingesta | HTML o PDF → una pieza por cada Section del contrato | Hecha. Probada con un contrato real (TMTG / TAE Technologies, dic. 2025): 112 de las 112 Sections de su índice |
-| 2. Extracción | Localiza las cláusulas objetivo, con cita y ubicación | Pendiente |
-| 3. Red flags | Compara cada cláusula con el playbook | Pendiente |
+| 2. Extracción | Localiza las cláusulas objetivo, con cita y ubicación | Escrita. La llamada a la API aún no se ha ejecutado; el resto está probado |
+| 3. Red flags | Compara cada cláusula con el playbook | Hecha para la termination fee |
 | 4. Output | Tabla exportable a CSV / Markdown | Pendiente |
 
 ## Idea de diseño: motor y conocimiento separados
@@ -46,6 +46,28 @@ un contrato de EDGAR a `data/contracts/`:
 export SEC_USER_AGENT="Nombre Apellido nombre@email.com"   # la SEC lo exige
 python fetch_edgar.py https://www.sec.gov/Archives/edgar/data/.../ex2-1.htm
 ```
+
+Para analizar un contrato (necesita una API key de Anthropic):
+
+```bash
+export ANTHROPIC_API_KEY="..."
+python analyze.py data/contracts/contrato.pdf --dry-run   # qué se enviaría, sin llamar a la API
+python analyze.py data/contracts/contrato.pdf             # extracción y veredictos
+```
+
+## Capas 2 y 3: extracción y veredicto
+
+1. **Selección (reglas).** `clauses.yaml` dice dónde suele estar cada cláusula.
+   El motor elige esas Sections y definiciones; solo eso se envía al modelo.
+2. **Extracción (modelo).** El modelo devuelve cada dato con una cita literal y
+   el trozo del que la saca, en un formato JSON fijo.
+3. **Verificación (código).** Se comprueba que cada cita aparece literalmente
+   en el contrato. Si no, el dato queda marcado y no se califica.
+4. **Veredicto (código).** Se calcula la métrica y se busca su tramo en
+   `playbook.yaml`. Sin IA: el mismo dato da siempre el mismo veredicto.
+
+El modelo solo interviene en el paso 2. Lo que decide el veredicto es
+aritmética sobre un dato cuya cita se ha comprobado.
 
 ## Capa 1: cómo funciona la ingesta
 
@@ -90,7 +112,10 @@ casi siempre es un encabezado que se ha escapado.
 ## Estructura
 
 ```
-deal_analyzer/ingest.py   capa 1
+deal_analyzer/ingest.py   capa 1: trocear el contrato
+deal_analyzer/extract.py  capa 2: seleccionar, extraer y verificar citas
+deal_analyzer/flag.py     capa 3: métrica y veredicto
+analyze.py                analiza un contrato de principio a fin
 main.py                   enseña el troceado de un contrato
 fetch_edgar.py            descarga un contrato de EDGAR
 config/merger_agreement/  cláusulas objetivo y playbook de M&A
@@ -103,4 +128,6 @@ tests/                    pruebas con un contrato sintético
 
 - `pdfplumber`: extrae el texto de los PDF conservando el orden de lectura.
   El HTML se lee con la librería estándar de Python, sin dependencias.
+- `pyyaml`: lee los archivos de configuración.
+- `anthropic`: cliente oficial de la API, para la extracción.
 - `pytest` (solo para las pruebas): `python -m pytest`.

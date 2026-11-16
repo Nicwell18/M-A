@@ -1,2 +1,6 @@
 # Leer el texto de los PDF, página a página.
 pdfplumber>=0.11
+# Leer los archivos de configuración (cláusulas, playbook, datos del deal).
+pyyaml>=6.0
+# Cliente oficial de la API de Anthropic, para la extracción de cláusulas.
+anthropic>=2.0
